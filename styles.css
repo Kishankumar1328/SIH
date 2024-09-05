@@ -1,0 +1,254 @@
+/* General styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100%;
+}
+
+/* Video Background */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent for better visibility */
+    padding: 20px;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.navbar .logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+}
+
+.navbar ul li {
+    margin-left: 20px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #18bc9c;
+}
+
+/* Auth page (Login and Signup) */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.auth-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+    animation: glow 2s ease-in-out infinite;
+}
+
+.auth-container h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.auth-container label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.auth-container button {
+    background-color: #18bc9c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.auth-container button:hover {
+    background-color: #16a085;
+}.route-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.route-container {
+    background-color: rgba(255, 255, 255, 0.85); /* Slight transparency to let the video glow through */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.route-container h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.route-container label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.route-container input,
+.route-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.route-container button {
+    background-color: #18bc9c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.route-container button:hover {
+    background-color: #16a085;
+}
+/* Bus Route Selection Page */
+.route-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.route-container {
+    background-color: rgba(255, 255, 255, 0.85); /* Slight transparency to let the video glow through */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.route-container h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.route-container label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.route-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.route-container button {
+    background-color: #18bc9c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.route-container button:hover {
+    background-color: #16a085;
+}
+
+
+/* Glowing Animation */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(24, 188, 156, 0.8), 0 0 20px rgba(24, 188, 156, 0.6), 0 0 30px rgba(24, 188, 156, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(24, 188, 156, 0.9), 0 0 40px rgba(24, 188, 156, 0.7), 0 0 60px rgba(24, 188, 156, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(24, 188, 156, 0.8), 0 0 20px rgba(24, 188, 156, 0.6), 0 0 30px rgba(24, 188, 156, 0.4);
+    }
+}
+
+
+/* Glowing Animation */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(24, 188, 156, 0.8), 0 0 20px rgba(24, 188, 156, 0.6), 0 0 30px rgba(24, 188, 156, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(24, 188, 156, 0.9), 0 0 40px rgba(24, 188, 156, 0.7), 0 0 60px rgba(24, 188, 156, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(24, 188, 156, 0.8), 0 0 20px rgba(24, 188, 156, 0.6), 0 0 30px rgba(24, 188, 156, 0.4);
+    }
+}
+

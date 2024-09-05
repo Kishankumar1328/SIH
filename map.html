@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delhi Traffic and Bus Route Finder</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        #map {
+            height: 80vh;
+            width: 100%;
+        }
+        .container {
+            padding: 10px;
+        }
+        .inputs {
+            margin-bottom: 10px;
+        }
+        /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+}
+
+h1 {
+    text-align: center;
+    color: #34495e;
+    font-size: 2.5em;
+    margin: 20px 0;
+}
+
+p {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Form and Input Styles */
+.inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+label {
+    margin: 0 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+select, button {
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+select {
+    width: 200px;
+    background: #ecf0f1;
+}
+
+button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2ecc71;
+}
+
+/* Map Styles */
+#map {
+    height: 80vh;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Toggle Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.toggle:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle {
+    background-color: #27ae60;
+}
+
+input:checked + .toggle:before {
+    transform: translateX(26px);
+}
+
+/* Traffic Information Section */
+.row-border {
+    border-top: 1px solid #ecf0f1;
+    padding-top: 15px;
+}
+
+.traffic-icon {
+    width: 40px;
+}
+
+.traffic-text {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #34495e;
+}
+
+#incident-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item h5 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #34495e;
+}
+
+.list-group-item p {
+    margin: 5px 0 0;
+    color: #7f8c8d;
+}
+
+/* Popup Error */
+#popup-wrapper .alert {
+    margin-top: 20px;
+    font-size: 1.1em;
+    text-align: center;
+}
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 20px 0;
+}
+
+p {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 10px;
+}
+
+#map {
+    height: 70vh;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+
+/* Input Section Styles */
+.inputs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-size: 16px;
+    color: #444;
+    margin-right: 10px;
+}
+
+select, button {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+button {
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Responsive Styles for Mobile */
+@media only screen and (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .inputs {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    label {
+        margin-bottom: 10px;
+    }
+
+    select, button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #map {
+        height: 50vh;
+    }
+}
+
+/* Responsive Styles for Larger Screens */
+@media only screen and (min-width: 1200px) {
+    #map {
+        height: 75vh;
+    }
+
+    .inputs {
+        justify-content: space-between;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    <h1>Delhi Traffic and Bus Route Finder</h1>
+    <p>Select a source and destination to find the shortest bus route considering traffic.</p>
+
+    <div class="container">
+        <!-- Input section -->
+        <div class="inputs">
+            <label for="From">From:</label>
+            <select id="From"></select>
+
+            <label for="destination">Destination:</label>
+            <select id="destination"></select>
+
+            <button onclick="findOptimalRoute()">Find Route</button>
+        </div>
+
+        <!-- Map section -->
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        const apiKey = '9qcmz1F4CyLSXBwmYZQwvDzVUISeYzgj';
+
+        // Initialize the map
+        const map = L.map('map').setView([28.6139, 77.2090], 13); // Center on Delhi
+
+        // Add TomTom tile layer
+        L.tileLayer(`https://api.tomtom.com/maps/sdk/4/tiles/{z}/{x}/{y}.png?key=${apiKey}`, {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Add OpenStreetMap tile layer for routing
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add bus stops to dropdowns
+        const busStops = {
+            "Connaught Place": { "location": [28.6315, 77.2167], "connections": ["India Gate", "Janpath", "Paharganj"] },
+            "India Gate": { "location": [28.6129, 77.2295], "connections": ["Connaught Place", "Pragati Maidan"] },
+            "Janpath": { "location": [28.6265, 77.2182], "connections": ["Connaught Place", "Rajpath"] },
+            "Paharganj": { "location": [28.6448, 77.2159], "connections": ["Connaught Place", "New Delhi Railway Station"] },
+            "New Delhi Railway Station": { "location": [28.6411, 77.2182], "connections": ["Paharganj", "Chandni Chowk"] },
+            "Chandni Chowk": { "location": [28.6562, 77.2301], "connections": ["New Delhi Railway Station", "Red Fort"] },
+            "Red Fort": { "location": [28.6562, 77.2410], "connections": ["Chandni Chowk", "Jama Masjid"] },
+            "Jama Masjid": { "location": [28.6507, 77.2334], "connections": ["Red Fort", "Rajghat"] },
+            "Rajghat": { "location": [28.6288, 77.2456], "connections": ["Jama Masjid", "Pragati Maidan"] },
+            "Pragati Maidan": { "location": [28.6136, 77.2481], "connections": ["India Gate", "Rajghat"] },
+            "Rajpath": { "location": [28.6146, 77.2058], "connections": ["Janpath", "Rashtrapati Bhavan"] },
+            "Rashtrapati Bhavan": { "location": [28.6143, 77.1995], "connections": ["Rajpath", "Chanakyapuri"] },
+            "Chanakyapuri": { "location": [28.5963, 77.1821], "connections": ["Rashtrapati Bhavan", "Safdarjung"] },
+            "Safdarjung": { "location": [28.5721, 77.2026], "connections": ["Chanakyapuri", "AIIMS"] },
+            "AIIMS": { "location": [28.5672, 77.2100], "connections": ["Safdarjung", "Hauz Khas"] },
+            "Hauz Khas": { "location": [28.5494, 77.1995], "connections": ["AIIMS", "Green Park"] },
+            "Green Park": { "location": [28.5584, 77.2027], "connections": ["Hauz Khas", "Saket"] },
+            "Saket": { "location": [28.5265, 77.2105], "connections": ["Green Park", "Qutub Minar"] },
+            "Qutub Minar": { "location": [28.5244, 77.1855], "connections": ["Saket", "Mehrauli"] },
+            "Mehrauli": { "location": [28.5195, 77.1656], "connections": ["Qutub Minar", "Chhatarpur"] },
+            "Chhatarpur": { "location": [28.5028, 77.1758], "connections": ["Mehrauli", "Vasant Kunj"] },
+            "Vasant Kunj": { "location": [28.5205, 77.1620], "connections": ["Chhatarpur", "IGI Airport"] },
+            "IGI Airport": { "location": [28.5562, 77.1000], "connections": ["Vasant Kunj", "Dwarka"] },
+            "Dwarka": { "location": [28.5840, 77.0680], "connections": ["IGI Airport", "Janakpuri"] },
+            "Janakpuri": { "location": [28.6235, 77.0930], "connections": ["Dwarka", "Rajouri Garden"] },
+            "Rajouri Garden": { "location": [28.6510, 77.1238], "connections": ["Janakpuri", "Punjabi Bagh"] },
+            "Punjabi Bagh": { "location": [28.6676, 77.1330], "connections": ["Rajouri Garden", "Pitampura"] },
+            "Pitampura": { "location": [28.6966, 77.1420], "connections": ["Punjabi Bagh", "Rohini"] },
+            "Rohini": { "location": [28.7363, 77.1200], "connections": ["Pitampura"] }
+        };
+
+        const sourceSelect = document.getElementById('From');
+        const destinationSelect = document.getElementById('destination');
+        for (const stop in busStops) {
+            const option = document.createElement('option');
+            option.value = stop;
+            option.text = stop;
+            sourceSelect.appendChild(option);
+
+            const option2 = option.cloneNode(true);
+            destinationSelect.appendChild(option2);
+        }
+
+        // Routing control
+        let routingControl;
+        let trafficLayer = L.layerGroup().addTo(map);
+
+        // Fetch Traffic Data
+        function fetchTrafficData() {
+            const trafficUrl = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point=28.6139,77.2090&key=${apiKey}`;
+
+            $.getJSON(trafficUrl, function(data) {
+                console.log('Traffic Data:', data);
+                trafficLayer.clearLayers();
+
+                if (data.flowSegmentData) {
+                    data.flowSegmentData.forEach(segment => {
+                        const { startPoint, endPoint, currentSpeed, freeFlowSpeed } = segment;
+                        const color = getColor(currentSpeed, freeFlowSpeed);
+
+                        L.polyline([
+                            [startPoint.latitude, startPoint.longitude],
+                            [endPoint.latitude, endPoint.longitude]
+                        ], { color, weight: 5, opacity: 0.8 }).addTo(trafficLayer);
+                    });
+                }
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching traffic data:', textStatus, errorThrown);
+            });
+        }
+
+        function getColor(currentSpeed, freeFlowSpeed) {
+            const speedRatio = currentSpeed / freeFlowSpeed;
+            return speedRatio < 0.5 ? 'red' : speedRatio < 0.75 ? 'orange' : 'green';
+        }
+
+        function findOptimalRoute() {
+            const source = document.getElementById('From').value;
+            const destination = document.getElementById('destination').value;
+
+            // Check if routing control already exists, remove it
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            // Create routing control with traffic-aware route
+            routingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(busStops[source].location[0], busStops[source].location[1]),
+                    L.latLng(busStops[destination].location[0], busStops[destination].location[1])
+                ],
+                routeWhileDragging: true,
+                showAlternatives: false,
+                createMarker: function (i, waypoint, n) {
+                    return L.marker(waypoint.latLng).bindPopup(i === 0 ? source : destination);
+                },
+                lineOptions: {
+                    styles: [{ color: '#FF0000', opacity: 0.7, weight: 5 }]
+                }
+            }).addTo(map);
+
+            // Optionally update traffic data when a new route is found
+            fetchTrafficData();
+        }
+
+        // Fetch traffic data initially
+        fetchTrafficData();
+        setInterval(fetchTrafficData, 60000); // Refresh traffic data every minute
+    </script>
+
+    <div class="row row-border">
+        <div class="col pt-3 label">
+            <span>Choose your location</span>
+            <div id="search-panel-container" class="row">
+                <div id="search-panel" class="container-fluid pb-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center pt-2">
+        <div class="col-sm-2">
+            <img class="traffic-icon" src="img/traffic-flow.png" alt="" />
+        </div>
+        <div class="col pt-2">
+            <label for="flow-toggle" class="traffic-text">Traffic flow</label>
+        </div>
+        <div class="col-sm-3 pt-2 text-right">
+            <label class="switch">
+                <input id="flow-toggle" type="checkbox" />
+                <span class="toggle round"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="row align-items-center pt-2">
+        <div class="col-sm-2">
+            <img class="traffic-icon" src="img/traffic_lights.png" alt="" />
+        </div>
+        <div class="col pt-2">
+            <label for="incidents-toggle" class="traffic-text">Traffic incidents</label>
+        </div>
+        <div class="col-sm-3 pt-2 text-right">
+            <label class="switch">
+                <input id="incidents-toggle" type="checkbox" />
+                <span class="toggle round"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="py-3 row row-border">
+        <div class="col">
+            <span class="show-traffic-layers">Bounding box for traffic incidents</span>
+            <button id="bounding-box-button" type="button" class="btn btn-primary btn-block my-2">
+                DRAW BOUNDING BOX
+            </button>
+        </div>
+    </div>
+
+    <div id="incident-list-wrapper" class="row pt-0">
+        <div class="col">
+            <div id="incident-list-container" class="shadow p-0">
+                <div id="incident-list" class="list-group"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-wrapper"></div>
+
+    <script>
+        var incidentListContainer = document.getElementById("incident-list");
+
+        function displayTrafficIncidents(boundingBox) {
+            var iconsMapping = [
+                "danger",
+                "accident",
+                "fog",
+                "danger",
+                "rain",
+                "ice",
+                "incident",
+                "laneclosed",
+                "roadclosed",
+                "roadworks",
+                "wind",
+                "flooding",
+                "detour",
+                "",
+            ];
+            var delayMagnitudeMapping = [
+                "unknown",
+                "minor",
+                "moderate",
+                "major",
+                "undefined",
+            ];
+
+            tt.services
+                .incidentDetails({
+                    key: apiKey,
+                    boundingBox: boundingBox,
+                    style: styleS1,
+                    zoomLevel: parseInt(map.getZoom()),
+                })
+                .go()
+                .then(function (results) {
+                    if (results.tm.poi.length === 0) {
+                        showErrorPopup("There are no traffic incidents in this area.");
+                        if (results.tm.poi.length === 0) {
+                            showErrorPopup("There are no traffic incidents in this area.");
+                        } else {
+                            incidentListContainer.innerHTML = "";
+                            results.tm.poi.forEach((incident) => {
+                                var incidentHtml = `
+                                    <div class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <img src="img/${iconsMapping[incident.iconCategoryID]}.png" alt="" />
+                                            </div>
+                                            <div class="col">
+                                                <h5>${incident.name}</h5>
+                                                <p>${incident.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                incidentListContainer.insertAdjacentHTML("beforeend", incidentHtml);
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+    
+            function showErrorPopup(message) {
+                var popupHtml = `
+                    <div class="alert alert-danger" role="alert">
+                        ${message}
+                    </div>
+                `;
+                document.getElementById("popup-wrapper").innerHTML = popupHtml;
+            }
+    
+            document.getElementById("bounding-box-button").addEventListener("click", () => {
+                var boundingBox = map.getBounds().toBBoxString();
+                displayTrafficIncidents(boundingBox);
+            });
+    
+            document.getElementById("flow-toggle").addEventListener("change", () => {
+                if (document.getElementById("flow-toggle").checked) {
+                    trafficLayer.addTo(map);
+                } else {
+                    trafficLayer.remove();
+                }
+            });
+    
+            document.getElementById("incidents-toggle").addEventListener("change", () => {
+                if (document.getElementById("incidents-toggle").checked) {
+                    incidentListContainer.style.display = "block";
+                } else {
+                    incidentListContainer.style.display = "none";
+                }
+            });
+        </script>
+    </body>
+    </html>

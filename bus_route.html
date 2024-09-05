@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Route Selection - DTC Bus Scheduling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="C:\Users\vsjai\Documents\HTML\New folder\Videos\50774-461709575_tiny.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="navbar">
+        <div class="logo">
+            <h1>DTC Bus Management</h1>
+        </div>
+        <ul>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="bus_route.html">Bus Route</a></li>
+            <li><a href="map.html">Map</a></li>
+        </ul>
+    </nav>
+
+    <!-- Bus Route Section -->
+    <section class="route-page">
+        <div class="route-container">
+            <h2>Bus Route Selection</h2>
+            <form id="route-form">
+                <label for="source">Source:</label>
+                <input type="text" id="source" placeholder="Enter Source Location">
+
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" placeholder="Enter Destination Location">
+
+                <label for="date">Date:</label>
+                <input type="date" id="date">
+
+                <label for="time">Time:</label>
+                <input type="time" id="time">
+
+                <button type="submit">Search Buses</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
